@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="image-file" type="file" />
+    <img id='image-display' />
+
+
+    <script>
+        document.querySelector('#image-file').onchange = obj => {
+            let formData = new FormData();
+            formData.append("photo", obj.target.files[0]);
+            console.log("Form data photo: " , formData.get("photo"));
+
+            fetch('/api/post-image', {
+                method: 'POST',
+                body: formData
+            })
+
+            console.log('obj.target.files[0]: ',obj.target.files[0])
+            console.log('formData: ',formData)
+
+            const  file =[{
+                'imgObj': obj.target.files[0]
+            }]
+
+            fetch('api/post-image',{ method: "POST", body: obj.target.files[0]})
+            .then(res => {
+                console.log(res); 
+                return res.json();
+            })
+            .then( data => console.log('get data:',data));
+        }
+
+
+        // Send data to backend
+        // const url = url/images/1
+        // document.querySelector('#image-display').src = url
+
+        
+        // const reader = new FileReader()
+        //     reader.onload = e => {
+        //         document.querySelector('#image-display').src = e.target.result
+        //     }
+        //     console.log('obj.target.files[0] => ',obj.target.files[0])
+        //     reader.readAsDataURL(obj.target.files[0]);
+    </script>
+</body>
+</html>
