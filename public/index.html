@@ -6,13 +6,17 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/api/post-image" enctype="multipart/form-data" method="POST">
-        <input type="file" name="myImage" accept="image/*" id='image-file'/>
-        <input type="submit" value="Upload Photo"/>
+    <form action="/api/post-image" enctype="multipart/form-data" method="POST" target="receive">
+        <label for="fname">First name:</label>
+        <input type="text" id="fname" name="fname"><br><br>
+        <label for="lname">Last name:</label>
+        <input type="text" id="lname" name="lname"><br><br>
+        <input type="file" name="myImage" accept="image/*"/><br><br>
+        <input type="submit" value="Submit Form"/>
+        <button type="button" id="getImage">Display Images</button>
+        <iframe id='receive' name='receive' hidden></iframe>
     </form>
 
-
-    <input type="submit" id="getImage"/>
 
     <div id="listImages">
 
@@ -23,7 +27,7 @@
         document.querySelector('#getImage').onclick = async () => {
             await fetch('/api/get-image').then( res => res.json())
             .then( data => {
-                document.querySelector('#listImages').innerHTML = data.map(({file:{filename}}) => `<img src="/assets/img/${filename}" width="200px"/>`)
+                document.querySelector('#listImages').innerHTML = data.map(({filename}) => `<img src="/assets/img/${filename}" width="200px"/>`).join('')
             })
         }
     </script>
