@@ -6,48 +6,26 @@
     <title>Document</title>
 </head>
 <body>
-    <input id="image-file" type="file" />
-    <img id='image-display' />
+    <form action="/api/post-image" enctype="multipart/form-data" method="POST">
+        <input type="file" name="myImage" accept="image/*" id='image-file'/>
+        <input type="submit" value="Upload Photo"/>
+    </form>
+
+
+    <input type="submit" id="getImage"/>
+
+    <div id="listImages">
+
+    </div>
 
 
     <script>
-        document.querySelector('#image-file').onchange = obj => {
-            let formData = new FormData();
-            formData.append("photo", obj.target.files[0]);
-            console.log("Form data photo: " , formData.get("photo"));
-
-            fetch('/api/post-image', {
-                method: 'POST',
-                body: formData
+        document.querySelector('#getImage').onclick = async () => {
+            await fetch('/api/get-image').then( res => res.json())
+            .then( data => {
+                document.querySelector('#listImages').innerHTML = data.map(({file:{filename}}) => `<img src="/assets/img/${filename}" width="200px"/>`)
             })
-
-            console.log('obj.target.files[0]: ',obj.target.files[0])
-            console.log('formData: ',formData)
-
-            const  file =[{
-                'imgObj': obj.target.files[0]
-            }]
-
-            fetch('api/post-image',{ method: "POST", body: obj.target.files[0]})
-            .then(res => {
-                console.log(res); 
-                return res.json();
-            })
-            .then( data => console.log('get data:',data));
         }
-
-
-        // Send data to backend
-        // const url = url/images/1
-        // document.querySelector('#image-display').src = url
-
-        
-        // const reader = new FileReader()
-        //     reader.onload = e => {
-        //         document.querySelector('#image-display').src = e.target.result
-        //     }
-        //     console.log('obj.target.files[0] => ',obj.target.files[0])
-        //     reader.readAsDataURL(obj.target.files[0]);
     </script>
 </body>
 </html>
